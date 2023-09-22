@@ -15,6 +15,11 @@ export default function Zipcode() {
         setData(await handler(zipcode));
     };
 
+    const handleReset = () => {
+        setZipcode('');
+        setData([]);
+    };
+
     return (
         <div className="flex flex-col items-center justify-center h-screen">
             <form onSubmit={handleSubmit}>
@@ -28,14 +33,25 @@ export default function Zipcode() {
                     name="zipcode"
                     className="py-3"
                     id="zipcode"
+                    value={zipcode}
                     onChange={(event) => setZipcode(event.target.value)}
                     placeholder="00000-000"
                 />
                 <input
                     type="submit"
                     value="Buscar"
-                    className="block w-full hover:bg-blue-500 hover:cursor-pointer rounded-md border-0 py-1.5 mt-1 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 sm:text-sm sm:leading-6"
+                    disabled={!zipcode}
+                    className={`block w-full hover:bg-blue-500 hover:cursor-pointer rounded-md border-0 py-1.5 mt-1 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 sm:text-sm sm:leading-6 
+                    ${!zipcode ? 'bg-gray-300 cursor-not-allowed' : 'bg-blue-500'}`}
                 />
+                {data?.cep && (
+                    <button
+                        onClick={handleReset}
+                        className="block w-full hover:bg-blue-300 hover:cursor-pointer rounded-md border-0 py-1.5 mt-1 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 sm:text-sm sm:leading-6"
+                    >
+                        Limpar
+                    </button>
+                )}
             </form>
 
             {data?.cep && (
@@ -48,6 +64,9 @@ export default function Zipcode() {
                     </h2>
                     <h2>
                         <strong>Localidade:</strong> {data.localidade}
+                    </h2>
+                    <h2>
+                        <strong>DDD:</strong> {data.ddd}
                     </h2>
                     <h2>
                         <strong>UF:</strong> {data.uf}
