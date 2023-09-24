@@ -10,7 +10,7 @@ export default function Zipcode() {
     const [isLoading, setIsLoading] = useState(false);
 
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-        event.preventDefault();
+        // event.preventDefault();
 
         try {
             setIsLoading(true);
@@ -33,30 +33,34 @@ export default function Zipcode() {
     };
 
     return (
-        <div className="flex flex-col items-center justify-center h-screen">
+        <div className="">
             {!isLoading && (
                 <form onSubmit={handleSubmit}>
-                    <label
-                        htmlFor="zipcode"
-                        className="mr-2"
-                    >
-                        <strong>CEP:</strong>
-                    </label>
-                    <input
-                        name="zipcode"
-                        className="py-3"
-                        id="zipcode"
-                        value={zipcode}
-                        onChange={handleInputChange}
-                        placeholder="00000-000"
-                    />
-                    <input
-                        type="submit"
-                        value="Buscar"
-                        // disabled={!zipcode}
-                        className={`block w-full hover:bg-blue-500 hover:cursor-pointer rounded-md border-0 py-1.5 mt-1 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 sm:text-sm sm:leading-6 
+                    {!data?.cep && (
+                        <>
+                            <label
+                                htmlFor="zipcode"
+                                className="mr-2 pr-2"
+                            >
+                                <strong>Informe o CEP:</strong>
+                            </label>
+                            <input
+                                name="zipcode"
+                                className="py-3 px-2"
+                                id="zipcode"
+                                value={zipcode}
+                                onChange={handleInputChange}
+                                placeholder="00000-000"
+                            />
+                            <input
+                                type="submit"
+                                value="Buscar"
+                                // disabled={!zipcode}
+                                className={`block w-full hover:bg-blue-500 hover:cursor-pointer rounded-md border-0 py-1.5 mt-1 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 sm:text-sm sm:leading-6 
                     ${!zipcode ? 'bg-gray-300 cursor-not-allowed' : 'bg-blue-500'}`}
-                    />
+                            />
+                        </>
+                    )}
                     {data?.cep && (
                         <button
                             onClick={handleReset}
@@ -69,8 +73,19 @@ export default function Zipcode() {
             )}
 
             {isLoading && <Loading />}
+
+            {!data ||
+                (data?.erro && (
+                    <div className="flex flex-col items-center justify-center">
+                        <h2 className="pt-2 mt-5">CEP não encontrado!</h2>
+                    </div>
+                ))}
+
             {data?.cep && (
                 <div className="flex flex-col py-5">
+                    <h2>
+                        <strong>CEP:</strong> {data.cep}
+                    </h2>
                     <h2>
                         <strong>Logradouro:</strong> {data.logradouro}
                     </h2>
